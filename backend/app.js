@@ -13,23 +13,33 @@ app.use(express.json());
 app.use(cors());
 
 
-app.get('/search', async (req, res) => {
-    const { key_word } = req.body;
+
+/*
+
+    LEARN MORE ABOUT ATLASSEARCH HERE https://www.mongodb.com/docs/atlas/atlas-search/tutorial/autocomplete-tutorial
+*/
+
+app.get('/search/:key_word', async (req, res) => {
+    const { key_word } = req.params;
+    if(!key_word) return res.status(400).json({message: 'key_word is required'});
     const agg = [
         { $search: { autocomplete: { query: key_word, path: "title" } } },
-        { $limit: 20 },
-        { $project: { _id: 0, title: 1 } }
+        { $limit: 10 },
+        { $project: { _id: true, title: true, year: true } }
     ];
     // -> RUN pipeline
-    const result = await collection.aggregate(agg);
+    const results = await collection.aggregate(agg).toArray();
     // -> print results
-    let results=[];
-    await result.forEach((resultOne=>{
-        results = [...results, resultOne];
-    }))
+    // let results=[];
+    // await result.forEach((resultOne => {
+    //     results = [...results, resultOne];
+    // }))
     res.status(200).json(results)
 })
 
+app.get("*", (req, res) => {
+    res.status(404).json({ message: "Not found" })
+})
 
 app.listen(
     process.env['PORT'],
