@@ -1,34 +1,40 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import React, {ChangeEvent, useEffect, useState} from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
 
+export default () => {
+  
+  const [busquedas, setBusquedas] = useState<any[]>([]);
+
+  useEffect(()=>{
+
+  }, [])
+
+  const [keyWord, setKeyWord] = useState<string>("");
+  function onChange({target}: ChangeEvent<HTMLInputElement>)
+  {
+    const { name, value } = target;
+    setKeyWord(value);
+    
+  }
+
+  async function onSubmit(e: React.FormEvent)
+  {
+    e.preventDefault();
+    console.log(keyWord)
+  }
+  
   return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+    <form
+      onSubmit={onSubmit}
+    >
+      <input 
+        type="text"  
+        placeholder='Type something' 
+        name="keyword"
+        value={keyWord}
+        onChange={onChange}
+      />
+      <input type="submit" />
+    </form>
+  );
 }
-
-export default App
