@@ -16,6 +16,7 @@ export default () => {
       .then(res => res.json())
       .then(res => {
         if (res) {
+          console.log(res)
           return setBusquedas(res)
         }
         setBusquedas([]);
@@ -75,14 +76,14 @@ export default () => {
 }
 
 interface ItemSearchedProps {
-  title: string,
+  name: string,
   _id: string,
   setKeyWord: React.Dispatch<React.SetStateAction<string>>,
   setCurrentMovie: React.Dispatch<React.SetStateAction<{}>>
   setBusquedas: React.Dispatch<React.SetStateAction<any[]>>
 }
 
-const ItemSearched = ({ _id, title, setKeyWord, setCurrentMovie, setBusquedas }: ItemSearchedProps) => {
+const ItemSearched = ({ _id, name, setKeyWord, setCurrentMovie, setBusquedas }: ItemSearchedProps) => {
 
   async function selectItem() {
     try {
@@ -105,7 +106,7 @@ const ItemSearched = ({ _id, title, setKeyWord, setCurrentMovie, setBusquedas }:
       className='item-searched'
       onClick={selectItem}
     >
-      <p>{title}</p>
+      <p>{name}</p>
     </div>
   );
 }
