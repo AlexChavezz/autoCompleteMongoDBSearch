@@ -18,29 +18,52 @@ app.use(cors());
     LEARN MORE ABOUT ATLASSEARCH HERE https://www.mongodb.com/docs/atlas/atlas-search/tutorial/autocomplete-tutorial
 */
 
-app.get('/', async (req, res) => {
-    const { phrase } = req.params;
-    console.log(phrase)
+app.get('/:phrase/:country', async (req, res) => {
+    const { phrase, country } = req.params;
+    console.log(country)
     try {
         const results = await client.db('main').collection('mainCollection').aggregate([
             {
                 $search: {
                     "compound": {
+                        'must': [{
+                            'text': {
+                                'query': phrase,
+                                'path': 'name'
+                            }
+
+                        }],
                         'filter': [
                             {
-                              'range': {
-                                'path': 'age',
-                                'gte': 20,
-                                
-                              }
+                                'range': {
+                                    'path': 'age',
+                                    'gte': 12,
+                                    'lte': 26
+                                    
+                                }
                             }
-                          ],
-                          "filter": [{
-                            "text": {
-                              "query": "alexis",
-                              "path": "name"
-                            }
-                          }],
+                        ],
+                        //  'filter':[{
+                        //     'range': {
+                        //         'path': 'age',
+                        //         'gte': 25,
+                        //     }
+                        //  }]
+                        // 'filter': [
+                        //     {
+                        //       'range': {
+                        //         'path': 'age',
+                        //         'gte': 20,
+
+                        //       }
+                        //     }
+                        //   ],
+                        //   "filter": [{
+                        //     "text": {
+                        //       "query": "alexis",
+                        //       "path": "name"
+                        //     }
+                        //   }],
                     }
                 }
             },
